@@ -4,11 +4,12 @@ public class Gerador {
 
     private static Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) {
-
+        
         int numberOfConfigs = 0;
         int numberOfQueens = 0;
         int numberOfSize = 0;
         int dimensions = 0;
+
         /*************************************************************************************************************************************** 
          CONFIGURAÇÕES PARA VERSÃO FINAL - Para obter input diretamente da linha de comandos
         if(args[0].equals("random")){
@@ -20,21 +21,18 @@ public class Gerador {
             generateStrings(numberOfConfigs, dimensions, numberOfQueens);
         }
         else if(args[0].equals("all")){
-            int allConfigs = Integer.parseInt(args[1]);
-            numberOfQueens = allConfigs;
-            dimensions = allConfigs * allConfigs;
+            numberOfQueens = Integer.parseInt(args[1]);
+            dimensions = numberOfQueens * numberOfQueens;
 
-            generateAllStrings(allConfigs, dimensions, numberOfQueens); 
+            generateAllStrings(dimensions, numberOfQueens); 
         }
         *****************************************************************************************************************************************/
 
-        //generateAllStrings(1, 64, 8);
-        /* System.out.println("Digite o número de configurações: ");
+         System.out.println("Digite o número de configurações: ");
         numberOfConfigs = scanner.nextInt();
         scanner.nextLine();
         generateStrings(numberOfConfigs,64,8);   
-
-        scanner.close(); */
+        scanner.close(); 
     }
 
     private static int randomIndex(int range){
@@ -74,7 +72,6 @@ public class Gerador {
         On the other hand, if we discard the first item, then we need to select “r” elements out of the remaining “n – 1″ items. */
         // Em termos matemáticos : C(n,r) = C(n - 1, r - 1) + C(n - 1, r)
    
-        int count = 0;
         String baseStringQueen = "D".repeat(numberOfQueens);
         String baseStringNothing = "-".repeat(dimensions - numberOfQueens);
         String stringFinal = baseStringQueen + baseStringNothing;
@@ -92,7 +89,7 @@ public class Gerador {
                 char aux2 = stringArray[i - j];
                 stringArray[i - j] = stringArray[i - j + 1];
                 stringArray[i - j + 1] = aux2;
-                System.out.println(new String(stringArray));
+                System.out.println(new String(stringArray)); // Cria um "pipeline" até ao final do primeiro ciclo for
             }
         }
 
