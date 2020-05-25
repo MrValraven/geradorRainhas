@@ -30,7 +30,7 @@ public class testeGeradorAll {
             stringArray[i] = stringArray[i + 1];
             stringArray[i + 1] = aux1;
             System.out.println(new String(stringArray));   // Aqui DDDDDD-D
-                 for(int j = 1 ; j < 8; j++){                   
+                 for(int j = 1 ; j < numberOfQueens; j++){                   
                 char aux2 = stringArray[i - j];
                 stringArray[i - j] = stringArray[i - j + 1];
                 stringArray[i - j + 1] = aux2;
