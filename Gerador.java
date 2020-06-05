@@ -1,32 +1,19 @@
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Gerador {
-
+    
     private static Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
         
         int numberOfConfigs = 0;
         int numberOfQueens = 0;
         int numberOfSize = 0;
         int dimensions = 0;
-
-        // Configuração final para aceitar argumentos do terminal
-        if(args.equals("random")){
-            numberOfConfigs = Integer.parseInt(args[3]);
-            numberOfQueens = Integer.parseInt(args[2]);
-            numberOfSize = Integer.parseInt(args[1]);
-            dimensions = numberOfSize * numberOfSize;
-
-            random(numberOfConfigs, dimensions, numberOfQueens);
-        }
-        else if(args.equals("all")){
-            numberOfQueens = Integer.parseInt(args[1]);
-            all(numberOfQueens); 
-        }
-        else if(args.length == 0){
+        /*
+        if(args.length == 0){
             System.out.println("Please choose a mode: 'Random' or 'all' ");
             String mode = scanner.nextLine();
             if(mode.contains("Random")){
@@ -51,8 +38,23 @@ public class Gerador {
                 System.out.println("Invalid mode, please try again");
                 mode = scanner.nextLine();
             }
+        // Configuração final para aceitar argumentos do terminal
+        else if(args[0].equals("random")){
+            numberOfConfigs = Integer.parseInt(args[3]);
+            numberOfQueens = Integer.parseInt(args[2]);
+            numberOfSize = Integer.parseInt(args[1]);
+            dimensions = numberOfSize * numberOfSize;
+
+            random(numberOfConfigs, dimensions, numberOfQueens);
         }
-        scanner.close(); 
+        else if(args[0].equals("all")){
+            numberOfQueens = Integer.parseInt(args[1]);
+            all(numberOfQueens); 
+        }
+        
+        }
+        scanner.close();*/
+        allValid(8);
     }
 
     private static int randomIndex(int range){
@@ -111,7 +113,7 @@ public class Gerador {
         //Valores de M: 2 = 16 dá 6Combs | 3 = 511 dá 84Combs | 4 = 65535 dá 1820Combs | 5 = 33554431 dá 53130Combs | 6 = 68719476735 dá 1947792Combs 
         String binary;
         String finalString;
-        for(int i = 0; i < highestValue; i++){
+        for(int i = lowestValue; i < highestValue; i++){
             binary = Integer.toBinaryString(i);
             char[] binaryChar = binary.toCharArray();
             count = 0;
@@ -119,7 +121,8 @@ public class Gerador {
                 if(binaryChar[j] == '1'){
                     count++;
                     }
-            }
+                }
+            
             if(count == m){
                 if(binary.length() < m * m){
                     binary = "-".repeat(m * m - binary.length()) + binary;
@@ -129,9 +132,71 @@ public class Gerador {
                 allStrings.add(finalString);
             }
         }
-        System.out.println("List size: " + allStrings.size());
-        System.out.println("List item 10: " + allStrings.get(10));
         return allStrings;
     }
+
+    private static char[][] criarTabuleiro(String stringConfig){
+
+        int size = (int) (Math.sqrt(stringConfig.length()));
+        char[][] board = new char[size][size];
+        int aux = 0;
+
+        // Converte a String em uma Matriz
+        for (int i = 0; i < size; i++){ 
+            for (int j = 0; j < size; j++){ 
+                if(aux < stringConfig.length())
+                    board[i][j] = stringConfig.charAt(aux);
+                aux++; 
+            } 
+        }
+        //Imprime tabuleiro
+        for (int i = 0; i < size; i++){ 
+            for (int j = 0; j < size; j++){ 
+                System.out.print(board[i][j]); 
+            } 
+            System.out.println(""); 
+        }
+        return board;
+    }
+
+    private static List<String> linhasDoTabuleiro(char[][] board){
+
+        List<String> linhas = new ArrayList<String>();
+        String linha = "";
+        int size = (int)Math.sqrt(board.length);
+
+        for(int i = 0; i < size; i++){
+            for(int j = 0; j < size; j++){
+                
+            }
+        }
+        return linhas;
+
+    }
+
+    private static List<String>  colunasDoTabuleiro(char[][] board){
+        List<String> colunas = new ArrayList<String>();
+        return colunas;
+    }
+
+    private static List<String> diagonaisAscendentesDoTabuleiro(char[][] board){
+        List<String> diagonaisAscendentes = new ArrayList<String>();
+        return diagonaisAscendentes;
+    }
+
+    private static List<String> diagonaisDescendentesDoTabuleiro(char board[][]){
+        List<String> diagonaisDescendentes = new ArrayList<String>();
+        return diagonaisDescendentes;
+    }
+
+    public static List<String> allValid(int m){
+    
+        List<String> allValid = new ArrayList<String>();
+        String stringConfig = "-D---------D---------D---------D--D-----D-------------D-----D---";
+        criarTabuleiro(stringConfig);
+        return allValid;
+
+    }
 }
+
 
