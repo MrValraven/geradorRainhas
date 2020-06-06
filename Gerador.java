@@ -204,11 +204,12 @@ public class Gerador {
     }
 
     private static List<String> diagonaisAscendentesDoTabuleiro(char[][] board){
+
         List<String> diagonaisAscendentes = new ArrayList<String>();
         String diagonalAscendente = "";
         char diagonalChar;
 
-        //print first half
+        //Primeira metade
         int linha = 0;
         int coluna;
 
@@ -226,7 +227,7 @@ public class Gerador {
             linha++;
         }
 
-        //print second half
+        //Segunda metade
         coluna = 1;
 
         while(coluna < board.length){
@@ -246,20 +247,70 @@ public class Gerador {
     }
 
     private static List<String> diagonaisDescendentesDoTabuleiro(char[][] board){
+
         List<String> diagonaisDescendentes = new ArrayList<String>();
+        String diagonalDescendente = "";
+        char diagonalChar;
+
+        //Primeira metade
+        int linha = 0;
+        int coluna;
+
+        while(linha < board.length){
+            coluna = board.length - 1;
+            int linhaAux = linha;
+            while(linhaAux >= 0){
+                diagonalChar = board[linhaAux][coluna];
+                diagonalDescendente += diagonalChar;
+                linhaAux--;
+                coluna--;
+            }
+            diagonaisDescendentes.add(diagonalDescendente);
+            diagonalDescendente = "";
+            linha++;
+        }
+
+        //Segunda metade
+        coluna = board.length - 2;
+
+        while(coluna >= 0){
+            int colunaAux = coluna;
+            linha = board.length - 1;
+            while(colunaAux >= 0){
+                diagonalChar = board[linha][colunaAux];
+                diagonalDescendente += diagonalChar;
+                linha--;
+                colunaAux--;
+            }
+            diagonaisDescendentes.add(diagonalDescendente);
+            diagonalDescendente = "";
+            coluna--;
+        }
         return diagonaisDescendentes;
     }
-
-    public static List<String> allValid(int m){
+    private static boolean isValid(String stringConfig){
         List<String> linha = new ArrayList<String>();
         List<String> coluna = new ArrayList<String>();
         List<String> diagonalAscendente = new ArrayList<String>();
-        List<String> allValid = new ArrayList<String>();
-        String stringConfig = "-D---------D---------D---------D--D-----D-------------D-----D---";
+        List<String> diagonalDescendente = new ArrayList<String>();
+
+
+        stringConfig = "-D---------D---------D---------D--D-----D-------------D-----D---";
         char[][] board = criarTabuleiro(stringConfig);
         linha = linhasDoTabuleiro(board);
         coluna = colunasDoTabuleiro(board);
         diagonalAscendente = diagonaisAscendentesDoTabuleiro(board);
+        diagonalDescendente = diagonaisDescendentesDoTabuleiro(board);
+    }
+
+    public static boolean validador(String stringConfig){
+        return true;
+
+    }
+
+    public static List<String> allValid(int m){
+        
+        List<String> allValid = new ArrayList<String>();
         
         return allValid;
 
