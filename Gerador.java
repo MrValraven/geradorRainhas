@@ -162,11 +162,18 @@ public class Gerador {
     private static List<String> linhasDoTabuleiro(char[][] board){
 
         List<String> linhas = new ArrayList<String>();
+        char linhaChar;
         String linha = "";
-        int size = (int)Math.sqrt(board.length);
+        int size = board.length;
 
         for(int i = 0; i < size; i++){
             for(int j = 0; j < size; j++){
+                linhaChar = board[i][j];
+                linha += linhaChar;
+                if(linha.length() == size){
+                    linhas.add(linha);
+                    linha = "";
+                }
                 
             }
         }
@@ -175,25 +182,85 @@ public class Gerador {
     }
 
     private static List<String>  colunasDoTabuleiro(char[][] board){
+
         List<String> colunas = new ArrayList<String>();
+        char colunaChar;
+        String coluna = "";
+        int size = board.length;
+        int aux = 0;
+
+        for(int j = 0; j < size; j++){
+            for(int i = 0; i < size; i++){
+                colunaChar = board[i][aux];
+                coluna += colunaChar;
+                if(coluna.length() == size){
+                    colunas.add(coluna);
+                    coluna = "";
+                }
+            }
+            aux++;
+        }
         return colunas;
     }
 
     private static List<String> diagonaisAscendentesDoTabuleiro(char[][] board){
         List<String> diagonaisAscendentes = new ArrayList<String>();
+        String diagonalAscendente = "";
+        char diagonalChar;
+
+        //print first half
+        int linha = 0;
+        int coluna;
+
+        while(linha < board.length){
+            coluna = 0;
+            int linhaAux = linha;
+            while(linhaAux >= 0){
+                diagonalChar = board[linhaAux][coluna];
+                diagonalAscendente += diagonalChar;
+                linhaAux--;
+                coluna++;
+            }
+            diagonaisAscendentes.add(diagonalAscendente);
+            diagonalAscendente = "";
+            linha++;
+        }
+
+        //print second half
+        coluna = 1;
+
+        while(coluna < board.length){
+            int colunaAux = coluna;
+            linha = board.length-1;
+            while(colunaAux <= board.length-1){
+                diagonalChar = board[linha][colunaAux];
+                diagonalAscendente += diagonalChar;
+                linha--;
+                colunaAux++;
+            }
+            diagonaisAscendentes.add(diagonalAscendente);
+            diagonalAscendente = "";
+            coluna++;
+        }
         return diagonaisAscendentes;
     }
 
-    private static List<String> diagonaisDescendentesDoTabuleiro(char board[][]){
+    private static List<String> diagonaisDescendentesDoTabuleiro(char[][] board){
         List<String> diagonaisDescendentes = new ArrayList<String>();
         return diagonaisDescendentes;
     }
 
     public static List<String> allValid(int m){
-    
+        List<String> linha = new ArrayList<String>();
+        List<String> coluna = new ArrayList<String>();
+        List<String> diagonalAscendente = new ArrayList<String>();
         List<String> allValid = new ArrayList<String>();
         String stringConfig = "-D---------D---------D---------D--D-----D-------------D-----D---";
-        criarTabuleiro(stringConfig);
+        char[][] board = criarTabuleiro(stringConfig);
+        linha = linhasDoTabuleiro(board);
+        coluna = colunasDoTabuleiro(board);
+        diagonalAscendente = diagonaisAscendentesDoTabuleiro(board);
+        
         return allValid;
 
     }
