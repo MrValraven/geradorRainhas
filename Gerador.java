@@ -288,30 +288,60 @@ public class Gerador {
         }
         return diagonaisDescendentes;
     }
+    private static boolean verificadorDeLists(List<String> conjunto){
+
+        String verificador;
+        int count;
+        for(int i = 0; i < conjunto.size(); i++){
+            verificador = conjunto.get(i);
+            if(verificador.contains("D")){
+                count = 0;
+                for(int j = 0; j < verificador.length(); j++){
+                    if(verificador.charAt(j) == 'D'){
+                        count++;
+                    }
+                }
+                if(count > 2){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
     private static boolean isValid(String stringConfig){
+
         List<String> linha = new ArrayList<String>();
         List<String> coluna = new ArrayList<String>();
         List<String> diagonalAscendente = new ArrayList<String>();
         List<String> diagonalDescendente = new ArrayList<String>();
-
-
-        stringConfig = "-D---------D---------D---------D--D-----D-------------D-----D---";
         char[][] board = criarTabuleiro(stringConfig);
         linha = linhasDoTabuleiro(board);
         coluna = colunasDoTabuleiro(board);
         diagonalAscendente = diagonaisAscendentesDoTabuleiro(board);
         diagonalDescendente = diagonaisDescendentesDoTabuleiro(board);
+
+        if(verificadorDeLists(linha) && verificadorDeLists(coluna) && verificadorDeLists(diagonalAscendente) && verificadorDeLists(diagonalDescendente)){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
-    public static boolean validador(String stringConfig){
-        return true;
-
+    public static void filtro(String stringConfig){
+        if(isValid(stringConfig)){
+            System.out.println("VALIDA");
+        }
+        else{
+            System.out.println("INVALIDA");
+        }
     }
 
     public static List<String> allValid(int m){
         
         List<String> allValid = new ArrayList<String>();
-        
+        String stringConfig = "-DD------------------D--------D---D------D------------D-------D-";
+        filtro(stringConfig);
         return allValid;
 
     }
