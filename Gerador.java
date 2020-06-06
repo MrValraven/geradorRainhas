@@ -54,7 +54,7 @@ public class Gerador {
         
         }
         scanner.close();*/
-        allValid(8);
+        allValid(4);
     }
 
     private static int randomIndex(int range){
@@ -148,13 +148,6 @@ public class Gerador {
                     board[i][j] = stringConfig.charAt(aux);
                 aux++; 
             } 
-        }
-        //Imprime tabuleiro
-        for (int i = 0; i < size; i++){ 
-            for (int j = 0; j < size; j++){ 
-                System.out.print(board[i][j]); 
-            } 
-            System.out.println(""); 
         }
         return board;
     }
@@ -294,14 +287,14 @@ public class Gerador {
         int count;
         for(int i = 0; i < conjunto.size(); i++){
             verificador = conjunto.get(i);
+            count = 0;
             if(verificador.contains("D")){
-                count = 0;
                 for(int j = 0; j < verificador.length(); j++){
                     if(verificador.charAt(j) == 'D'){
                         count++;
                     }
                 }
-                if(count > 2){
+                if(count >= 2){
                     return false;
                 }
             }
@@ -327,21 +320,40 @@ public class Gerador {
             return false;
         }
     }
-
-    public static void filtro(String stringConfig){
-        if(isValid(stringConfig)){
-            System.out.println("VALIDA");
+    public static void validadorIndividual(String stringConfig){
+        if(isValid(stringConfig) == true){
+            System.out.println("VALIDA"); 
         }
         else{
             System.out.println("INVALIDA");
         }
     }
 
+    public static String filtro(String stringConfig){
+        if(isValid(stringConfig) == true){
+            return "VALIDA";
+        }
+        else{
+            return "INVALIDA";
+        }
+    }
+
     public static List<String> allValid(int m){
         
         List<String> allValid = new ArrayList<String>();
-        String stringConfig = "-DD------------------D--------D---D------D------------D-------D-";
-        filtro(stringConfig);
+        String newConfig;
+        List<String> allConfigs = all(m);
+        
+      
+       for(int i = 0; i < allConfigs.size(); i++){
+            newConfig = allConfigs.get(i);
+            filtro(newConfig);
+            if(filtro(newConfig) == "VALIDA"){
+                System.out.println(newConfig);
+                allValid.add(newConfig);
+            }
+        } 
+        System.out.println("Quantidade de válidas: " + allValid.size());
         return allValid;
 
     }
