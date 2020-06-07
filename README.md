@@ -1,5 +1,5 @@
 # geradorRainhas
-TRABALHO FINAL - PROGRAMAÇÃO 2
+TRABALHO FINAL - PROGRAMAÇÃO 2 -
 N-Queen Puzzle
 
 Random N Q M:
