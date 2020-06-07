@@ -5,39 +5,58 @@ import java.util.Scanner;
 public class Gerador {
     
     private static Scanner scanner = new Scanner(System.in);
+    private static int modeValue = 0;
 
     public static void main(String[] args) {
-        
         int numberOfConfigs = 0;
         int numberOfQueens = 0;
         int numberOfSize = 0;
         int dimensions = 0;
-        /*
+        
         if(args.length == 0){
-            System.out.println("Please choose a mode: 'Random' or 'all' ");
+            System.out.println("Please choose a mode: 'random' , 'all' , 'allValid' or 'validador'.");
             String mode = scanner.nextLine();
-            if(mode.contains("Random")){
-                System.out.println("Digite o número de configurações: ");
-                numberOfConfigs = scanner.nextInt();
-                scanner.nextLine();
-                System.out.println("Digite a dimensão do tabuleiro: ");
-                numberOfSize = scanner.nextInt();
-                scanner.nextLine();
-                System.out.println("Digite o número de rainhas: ");
-                numberOfQueens = scanner.nextInt();
-                scanner.nextLine();
-                random(numberOfSize,numberOfQueens,numberOfConfigs);
+            while(mode != "random" || mode != "allValid" || mode != "all" || mode != "validador"){
+                if(mode.contains("random")){
+                    System.out.println("Digite o numero de configuracoes: ");
+                    numberOfConfigs = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.println("Digite a dimensao do tabuleiro: ");
+                    numberOfSize = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.println("Digite o numero de rainhas: ");
+                    numberOfQueens = scanner.nextInt();
+                    scanner.nextLine();
+                    random(numberOfSize,numberOfQueens,numberOfConfigs);
+                    break;
+                }
+                else if(mode.contains("allValid")){
+                    int value = 0;
+                    System.out.println("Value: ");
+                    value = scanner.nextInt();
+                    allValid(value);
+                    break;
+                }
+                else if(mode.contains("all")){
+                    modeValue = 1;
+                    int value = 0;
+                    System.out.println("Value: ");
+                    value = scanner.nextInt();
+                    all(value);
+                    break;
+                }
+                else if(mode.contains("validador")){
+                    System.out.println("Insira a configuracao: ");
+                    String configuracao = scanner.nextLine();
+                    validadorIndividual(configuracao);
+                    break;
+                }
+                else{
+                    System.out.println("Invalid mode, please try again");
+                    mode = scanner.nextLine();
+                }
             }
-            else if(mode.contains("all")){
-                int value = 0;
-                System.out.println("Value: ");
-                value = scanner.nextInt();
-                all(value);
-            }
-            else{
-                System.out.println("Invalid mode, please try again");
-                mode = scanner.nextLine();
-            }
+        }
         // Configuração final para aceitar argumentos do terminal
         else if(args[0].equals("random")){
             numberOfConfigs = Integer.parseInt(args[3]);
@@ -48,13 +67,11 @@ public class Gerador {
             random(numberOfConfigs, dimensions, numberOfQueens);
         }
         else if(args[0].equals("all")){
+            modeValue = 1;
             numberOfQueens = Integer.parseInt(args[1]);
             all(numberOfQueens); 
         }
-        
-        }
-        scanner.close();*/
-        allValid(4);
+        scanner.close();
     }
 
     private static int randomIndex(int range){
@@ -70,35 +87,49 @@ public class Gerador {
     private static String addQueensToString(int size, int numberOfQueens) {
         StringBuilder string = new StringBuilder(dashLine(size));
         int queenCounter = 0;
+        int index = 0;
 
             for(int j = 0; j < string.length(); j++){
-                while(queenCounter <= numberOfQueens){
-                    string.setCharAt(randomIndex(size), 'D');
-                    queenCounter++;
+                while(queenCounter < numberOfQueens){
+                    index = randomIndex(size);
+                    if(string.charAt(index) == 'D'){
+                        index = randomIndex(size);
+                    }
+                    else if(string.charAt(index) == '-'){
+                        string.setCharAt(index, 'D');
+                        queenCounter++;
+                    }
                 }
             }
             return string.toString();
     }
 
     public static List<String> random(int m, int q, int n){ 
-        List<String> configList = new ArrayList<String>();
+        List<String> randomList = new ArrayList<String>();
+        String randomString;
         int dimensions = m * m;
+
         if(q <= m){
             for(int i = 0; i < n; i++){
-                configList.add(addQueensToString(dimensions, q));
+                randomString = addQueensToString(dimensions, q);
+                randomList.add(randomString);
+                System.out.println(randomString);
             }
         }
         else{
             System.out.println("Argumentos inválidos, o numero de rainhas (Q) é maior que a dimensão (M) permitida");
         }
-        return configList;
+        return randomList;
     }
 
-    
     public static List<String> all(int m){
         List<String> allStrings = new ArrayList<String>();
-        int lowestValue = 0;
+        String binary;
+        String finalString;
+        long lowestValue = 0;
         long highestValue = 0;
+        int count = 0;
+
         if(m < 2){
             highestValue = (long)Math.pow(2, m);
         }
@@ -106,15 +137,12 @@ public class Gerador {
             highestValue = (long)Math.pow(2, m+2);
         }
         else{
-            lowestValue = (int)Math.pow(2, m) - 1;
+            lowestValue = (long)Math.pow(2, m) - 1;
             highestValue = (long)Math.pow(2, m * m);
         }
-        int count = 0;
-        //Valores de M: 2 = 16 dá 6Combs | 3 = 511 dá 84Combs | 4 = 65535 dá 1820Combs | 5 = 33554431 dá 53130Combs | 6 = 68719476735 dá 1947792Combs 
-        String binary;
-        String finalString;
-        for(int i = lowestValue; i < highestValue; i++){
-            binary = Integer.toBinaryString(i);
+
+        for(long i = lowestValue; i < highestValue; i++){
+            binary = Long.toBinaryString(i);
             char[] binaryChar = binary.toCharArray();
             count = 0;
             for(int j = 0; j < binaryChar.length; j++) {
@@ -129,6 +157,9 @@ public class Gerador {
                 }
                 finalString = binary.replace('1', 'D');
                 finalString = finalString.replace('0', '-');
+                if(modeValue == 1){
+                    System.out.println(finalString);
+                }
                 allStrings.add(finalString);
             }
         }
@@ -171,7 +202,6 @@ public class Gerador {
             }
         }
         return linhas;
-
     }
 
     private static List<String>  colunasDoTabuleiro(char[][] board){
@@ -197,15 +227,13 @@ public class Gerador {
     }
 
     private static List<String> diagonaisAscendentesDoTabuleiro(char[][] board){
-
         List<String> diagonaisAscendentes = new ArrayList<String>();
         String diagonalAscendente = "";
         char diagonalChar;
-
-        //Primeira metade
         int linha = 0;
         int coluna;
 
+        //Primeira metade
         while(linha < board.length){
             coluna = 0;
             int linhaAux = linha;
@@ -244,11 +272,10 @@ public class Gerador {
         List<String> diagonaisDescendentes = new ArrayList<String>();
         String diagonalDescendente = "";
         char diagonalChar;
-
-        //Primeira metade
         int linha = 0;
         int coluna;
 
+        //Primeira metade
         while(linha < board.length){
             coluna = board.length - 1;
             int linhaAux = linha;
@@ -281,10 +308,11 @@ public class Gerador {
         }
         return diagonaisDescendentes;
     }
-    private static boolean verificadorDeLists(List<String> conjunto){
 
+    private static boolean isListValid(List<String> conjunto){
         String verificador;
         int count;
+
         for(int i = 0; i < conjunto.size(); i++){
             verificador = conjunto.get(i);
             count = 0;
@@ -301,8 +329,8 @@ public class Gerador {
         }
         return true;
     }
-    private static boolean isValid(String stringConfig){
 
+    private static boolean isValid(String stringConfig){
         List<String> linha = new ArrayList<String>();
         List<String> coluna = new ArrayList<String>();
         List<String> diagonalAscendente = new ArrayList<String>();
@@ -313,14 +341,16 @@ public class Gerador {
         diagonalAscendente = diagonaisAscendentesDoTabuleiro(board);
         diagonalDescendente = diagonaisDescendentesDoTabuleiro(board);
 
-        if(verificadorDeLists(linha) && verificadorDeLists(coluna) && verificadorDeLists(diagonalAscendente) && verificadorDeLists(diagonalDescendente)){
+        if(isListValid(linha) && isListValid(coluna) && isListValid(diagonalAscendente) && isListValid(diagonalDescendente)){
             return true;
         }
         else{
             return false;
         }
     }
+
     public static void validadorIndividual(String stringConfig){
+
         if(isValid(stringConfig) == true){
             System.out.println("VALIDA"); 
         }
@@ -330,6 +360,7 @@ public class Gerador {
     }
 
     public static String filtro(String stringConfig){
+
         if(isValid(stringConfig) == true){
             return "VALIDA";
         }
@@ -339,13 +370,11 @@ public class Gerador {
     }
 
     public static List<String> allValid(int m){
-        
         List<String> allValid = new ArrayList<String>();
         String newConfig;
         List<String> allConfigs = all(m);
         
-      
-       for(int i = 0; i < allConfigs.size(); i++){
+        for(int i = 0; i < allConfigs.size(); i++){
             newConfig = allConfigs.get(i);
             filtro(newConfig);
             if(filtro(newConfig) == "VALIDA"){
@@ -353,10 +382,6 @@ public class Gerador {
                 allValid.add(newConfig);
             }
         } 
-        System.out.println("Quantidade de válidas: " + allValid.size());
         return allValid;
-
     }
 }
-
-
